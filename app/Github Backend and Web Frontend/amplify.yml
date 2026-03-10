@@ -1,0 +1,26 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - cd Frontend
+        - echo "Node version:"
+        - node --version
+        - echo "NPM version:"
+        - npm --version
+        - rm -rf node_modules
+        - npm ci --legacy-peer-deps
+    build:
+      commands:
+        - echo "Starting build process..."
+        - CI=false SKIP_PREFLIGHT_CHECK=true npm run build:amplify
+        - echo "Build completed successfully"
+        - ls -la dist/
+  artifacts:
+    baseDirectory: Frontend/dist
+    files:
+      - "**/*"
+  cache:
+    paths:
+      - Frontend/node_modules/**/*
+      - Frontend/.npm/**/*
